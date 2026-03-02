@@ -1,0 +1,150 @@
+<div class="wrapper" [class.dark]="darkMode">
+  <div class="animated-bg"></div>
+  <div class="grid-overlay"></div>
+  
+  <mat-toolbar class="toolbar">
+    <span class="logo">🦊 FOXES GAMING</span>
+    <span class="spacer"></span>
+
+    <mat-slide-toggle
+      [checked]="darkMode"
+      (change)="toggleTheme($event.checked)"
+      class="theme-toggle"
+    >
+      <span class="toggle-label">{{ darkMode ? '🌙 Dark' : '☀️ Light' }}</span>
+    </mat-slide-toggle>
+  </mat-toolbar>
+
+  <div class="page">
+    <mat-card class="card">
+      <div class="card-header">
+        <h1 class="title">PLAYER REGISTRATION</h1>
+        <p class="subtitle">Join the ultimate gaming experience</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <!-- Full Name -->
+        <mat-form-field appearance="outline" class="full gaming-field">
+          <mat-label>🎮 Gamer Tag / Full Name</mat-label>
+          <input matInput formControlName="fullName" placeholder="Enter your name" />
+          <mat-error *ngIf="f.fullName.touched && f.fullName.errors?.['required']">
+            ⚠️ Gamer tag is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field appearance="outline" class="full gaming-field">
+          <mat-label>📧 Email Address</mat-label>
+          <input matInput formControlName="email" placeholder="your.email@foxes.gg" />
+          <mat-error *ngIf="f.email.touched && f.email.errors?.['required']">
+            ⚠️ Email is required
+          </mat-error>
+          <mat-error *ngIf="f.email.touched && f.email.errors?.['email']">
+            ⚠️ Invalid email format
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Password -->
+        <mat-form-field appearance="outline" class="full gaming-field">
+          <mat-label>🔐 Security Code</mat-label>
+          <input matInput type="password" formControlName="password" placeholder="Create a secure password" />
+
+          <mat-error *ngIf="f.password.touched && f.password.errors?.['required']">
+            ⚠️ Security code is required
+          </mat-error>
+
+          <mat-error *ngIf="f.password.touched && f.password.errors?.['passwordRule']">
+            ⚠️ Must be 8+ characters, alphanumeric, start with a letter
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Organization / Event -->
+        <mat-form-field appearance="outline" class="full gaming-field">
+          <mat-label>🏆 Guild / Tournament</mat-label>
+          <input matInput formControlName="organization" />
+          <mat-error *ngIf="f.organization.touched && f.organization.errors?.['required']">
+            ⚠️ Guild/Tournament is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- DOB -->
+        <mat-form-field appearance="outline" class="full gaming-field">
+          <mat-label>🎂 Birth Date (18+ Required)</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dob" placeholder="Select your birth date" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+
+          <mat-error *ngIf="f.dob.touched && f.dob.errors?.['required']">
+            ⚠️ Birth date is required
+          </mat-error>
+          <mat-error *ngIf="f.dob.touched && f.dob.errors?.['dobTooYoung']">
+            ⚠️ Must be 18+ to participate (born 2006 or earlier)
+          </mat-error>
+          <mat-error *ngIf="f.dob.touched && f.dob.errors?.['dobInvalid']">
+            ⚠️ Invalid date
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Attendance Type -->
+        <div class="section">
+          <label class="section-title">🎯 Play Mode</label>
+          <mat-radio-group formControlName="attendanceType" class="radio-row">
+            <mat-radio-button value="onsite" class="radio-card">
+              <div class="radio-content">
+                <span class="radio-icon">🏢</span>
+                <span class="radio-text">On-site Arena</span>
+              </div>
+            </mat-radio-button>
+            <mat-radio-button value="online" class="radio-card">
+              <div class="radio-content">
+                <span class="radio-icon">🌐</span>
+                <span class="radio-text">Online Battle</span>
+              </div>
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <!-- Slider -->
+        <div class="section skill-section">
+          <div class="slider-header">
+            <span class="slider-title">⚔️ Skill Level</span>
+            <span class="skill-value">{{ form.value.skillLevel }}/10</span>
+          </div>
+          <div class="skill-labels">
+            <span>Noob</span>
+            <span>Pro</span>
+            <span>Legend</span>
+          </div>
+
+          <mat-slider min="0" max="10" step="1" class="full gaming-slider">
+            <input matSliderThumb formControlName="skillLevel" />
+          </mat-slider>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+          <button mat-raised-button class="full submit-btn" type="submit" [disabled]="form.invalid">
+            <span class="btn-text">🚀 START YOUR JOURNEY</span>
+            <span class="btn-glow"></span>
+          </button>
+
+          <button mat-stroked-button type="button" class="full reset-btn" (click)="reset()">
+            🔄 Reset Form
+          </button>
+        </div>
+      </form>
+
+      <div class="output" *ngIf="submitted">
+        <div class="success-banner">
+          <div class="success-icon">✨</div>
+          <h3>Registration Successful!</h3>
+          <p>Welcome to Foxes Gaming, Player!</p>
+        </div>
+        <div class="player-stats">
+          <h4>📊 Player Profile</h4>
+          <pre class="stats-data">{{ form.value | json }}</pre>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
